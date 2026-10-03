@@ -4,6 +4,7 @@
   <arg name="extensions" value="php"/><arg name="colors"/>
   <rule ref="PSR12">
     <exclude name="Generic.Files.LineLength.TooLong"/>
+    <exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
   </rule>
 </ruleset>
 
