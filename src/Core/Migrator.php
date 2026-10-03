@@ -21,11 +21,11 @@ final readonly class Migrator
             if (in_array($name, $applied, true)) {
                 continue;
             }
-            Database::transaction($this->pdo, function (PDO $pdo) use ($file, $name): void {
-                $pdo->exec((string) file_get_contents($file));
-                $statement = $pdo->prepare('INSERT INTO migrations (name) VALUES (:name)');
-                $statement->execute(['name' => $name]);
-            });
+            // MySQL DDL statements implicitly commit, so migration bookkeeping
+            // must not use the transaction helper intended for business data.
+            $this->pdo->exec((string) file_get_contents($file));
+            $statement = $this->pdo->prepare('INSERT INTO migrations (name) VALUES (:name)');
+            $statement->execute(['name' => $name]);
             echo "Migrated: {$name}\n";
         }
     }
