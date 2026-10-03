@@ -1,0 +1,34 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file: .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/vendor
+    command: sh -c "php bin/console migrate && php bin/console seed && php -S 0.0.0.0:8080 -t public"
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-management}
+      MYSQL_USER: ${DB_USERNAME:-management}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-management}
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql_data:
+

@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use App\Core\Migrator;
+use App\Database\Seeder;
+
+$app = require dirname(__DIR__) . '/bootstrap/app.php';
+$pdo = $app->container->get(PDO::class);
+$command = $argv[1] ?? 'help';
+
+match ($command) {
+    'migrate' => (new Migrator($pdo, dirname(__DIR__) . '/database/migrations'))->migrate(),
+    'seed' => (new Seeder($pdo))->run(),
+    default => print "Commands: migrate, seed\n",
+};
+
