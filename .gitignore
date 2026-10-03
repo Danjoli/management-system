@@ -1,0 +1,12 @@
+/vendor/
+/.env
+/.phpunit.cache/
+/storage/logs/*.log
+/storage/cache/*
+!/storage/cache/.gitkeep
+!/storage/logs/.gitkeep
+/.idea/
+/.vscode/
+/work/
+/outputs/
+
