@@ -11,6 +11,11 @@ services:
       - .:/app
       - /app/vendor
     command: sh -c "php bin/console migrate && php bin/console seed && php -S 0.0.0.0:8080 -t public"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
   mysql:
     image: mysql:8.4
